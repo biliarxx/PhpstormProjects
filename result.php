@@ -6,14 +6,14 @@
     <h1>База пользователей</h1>
 <?php
 
-    $name = "qwe";//$_POST['name'];
-    $surname = "rty";//$_POST['surname'];
-    $phoneNumber = 123456;//$_POST['phoneNumber'];
+    $name = $_POST['name'];
+    $surname = $_POST['surname'];
+    $phoneNumber = $_POST['phoneNumber'];
 
+try {
     $mysql = new mysqli("localhost", "root", "", $dbname = "dbname");
     $mysql-> query("SET NAMEs 'utf8'");
 
-try {
     $mysql->query("CREATE DATABASE IF NOT EXISTS `$dbname`");
     $mysql-> query("CREATE TABLE `users` (
   `id` int(20) NOT NULL  AUTO_INCREMENT,
@@ -24,19 +24,18 @@ try {
 )");
 
     $mysql->query("INSERT INTO `users`(`name`, `surname`, `phoneNumber`) VALUES ($name,$surname,$phoneNumber");
-    $result = $mysql-> query("SELECT * FROM `$dbname` WHERE 1")->fetch_all();
-
+    $results = $mysql-> query("SELECT * FROM `$dbname`")->fetch_all(MYSQLI_ASSOC);
+    foreach ($results as $result) {
+        printf("%s %s\n %d\n", $result["name"], $result["surname"], $result["phoneNumber"]);
+    }
+    $mysql-> close();
 } catch (PDOException $e) {
     throw new Exception($e->getMessage());
 }
-$mysql-> close();
 
 //    if ($mysql->connect_error) {
 //        echo "Error: ".$mysql->connect_error;
 //    } else {
-
-
-
 
     require_once "blocks/footer.php";
 ?>
